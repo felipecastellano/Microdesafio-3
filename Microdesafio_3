@@ -1,4 +1,4 @@
-# Microdesafío 3 – Coprocesador bfloat16 con SPI
+# Microdesafío 3 – Coprocesador bfloat16 con SPI  
 
 Este proyecto implementa un coprocesador aritmético capaz de ejecutar operaciones en formato **bfloat16** utilizando una interfaz **SPI full-dúplex**. El sistema procesa instrucciones para suma/resta, multiplicación, división y operaciones acumulativas sobre un registro interno de 16 bits llamado **ACC**.
 
