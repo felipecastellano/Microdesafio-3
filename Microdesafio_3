@@ -1,0 +1,28 @@
+# Microdesafío 3 – Coprocesador bfloat16 con SPI
+
+Este proyecto implementa un coprocesador aritmético capaz de ejecutar operaciones en formato **bfloat16** utilizando una interfaz **SPI full-dúplex**. El sistema procesa instrucciones para suma/resta, multiplicación, división y operaciones acumulativas sobre un registro interno de 16 bits llamado **ACC**.
+
+El chip recibe por MOSI una instrucción seguida de las palabras de datos necesarias. Dependiendo del comando, el sistema devuelve resultados inmediatos por MISO o actualiza el acumulador. Todas las operaciones se ejecutan empleando los módulos funcionales suministrados (`fp16sum_res_pipe`, `fpmul`, `fpdiv`).
+
+El diseño integra un **datapath** compuesto por:
+- Un acumulador de 16 bits (ACC)
+- Registros de entrada A y B
+- Módulos aritméticos para suma/resta, multiplicación y división
+- Lógica de control para interpretar instrucciones SPI
+
+El controlador coordina la recepción de palabras, el inicio de cada operación y la entrega del resultado según el formato definido en la especificación. Se soportan instrucciones como ZERO, SET_ACC, LOAD_ACC, ADD2, SUB2, MPY2, DIV2, SUM, SUB, MAC y MAS.
+
+Se realizaron simulaciones comportamentales para verificar:
+- El protocolo SPI
+- La secuencia correcta de operandos
+- La actualización o no del acumulador según cada instrucción
+- La coherencia de los resultados entregados por MISO
+
+Finalmente, el proyecto se preparó siguiendo la estructura recomendada para OpenLane, incluyendo:
+- Código fuente en Verilog
+- Archivos JSON de configuración
+- Archivos SDC de restricciones de tiempo
+- Reportes STA post-síntesis
+- Layout final generado por OpenLane
+
+Este README resume las funcionalidades principales implementadas y la organización general del proyecto.
