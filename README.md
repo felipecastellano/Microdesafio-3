@@ -4,25 +4,128 @@ Este proyecto implementa un coprocesador aritmético capaz de ejecutar operacion
 
 El chip recibe por MOSI una instrucción seguida de las palabras de datos necesarias. Dependiendo del comando, el sistema devuelve resultados inmediatos por MISO o actualiza el acumulador. Todas las operaciones se ejecutan empleando los módulos funcionales suministrados (`fp16sum_res_pipe`, `fpmul`, `fpdiv`).
 
+---
+
+## Arquitectura del coprocesador
+
 El diseño integra un **datapath** compuesto por:
-- Un acumulador de 16 bits (ACC)
-- Registros de entrada A y B
-- Módulos aritméticos para suma/resta, multiplicación y división
-- Lógica de control para interpretar instrucciones SPI
 
-El controlador coordina la recepción de palabras, el inicio de cada operación y la entrega del resultado según el formato definido en la especificación. Se soportan instrucciones como ZERO, SET_ACC, LOAD_ACC, ADD2, SUB2, MPY2, DIV2, SUM, SUB, MAC y MAS.
+- **Acumulador de 16 bits (ACC)**: almacena resultados intermedios y operaciones acumulativas.  
+- **Registros de entrada A y B**: capturan los operandos enviados por SPI.  
+- **Módulos aritméticos**:  
+  - `fp16sum_res_pipe`: suma y resta en bfloat16  
+  - `fpmul`: multiplicación en bfloat16  
+  - `fpdiv`: división en bfloat16  
+- **Lógica de control**: interpreta instrucciones SPI, coordina la recepción de palabras y controla la ejecución de operaciones.  
 
-Se realizaron simulaciones comportamentales para verificar:
-- El protocolo SPI
-- La secuencia correcta de operandos
-- La actualización o no del acumulador según cada instrucción
-- La coherencia de los resultados entregados por MISO
+---
 
-Finalmente, el proyecto se preparó siguiendo la estructura recomendada para OpenLane, incluyendo:
-- Código fuente en Verilog
-- Archivos JSON de configuración
-- Archivos SDC de restricciones de tiempo
-- Reportes STA post-síntesis
-- Layout final generado por OpenLane
+## Funcionamiento general del módulo `bfloat16_processor`
 
-Este README resume las funcionalidades principales implementadas y la organización general del proyecto.
+1. **Interfaz SPI**:  
+   - `sck`: reloj SPI  
+   - `mosi`: datos del master hacia el esclavo  
+   - `miso`: datos del esclavo hacia el master  
+   - `cs`: chip select (activo bajo)  
+
+2. **Recepción de instrucciones**:  
+   - Se recibe primero la instrucción (16 bits) por MOSI.  
+   - Según la instrucción, se leen uno o dos operandos.  
+   - La máquina de estados interna controla este flujo:  
+     - `state = 0`: esperando instrucción  
+     - `state = 1`: esperando primer operando  
+     - `state = 2`: esperando segundo operando  
+     - `state = 3`: ejecutar operación  
+
+3. **Ejecutar operaciones**:  
+   - Las instrucciones soportadas incluyen:  
+     - `ZERO`: limpia el acumulador  
+     - `SET_ACC`: carga el acumulador  
+     - `LOAD_ACC`: devuelve el acumulador  
+     - `ADD2`, `SUB2`: suma/resta directa  
+     - `MPY2`, `DIV2`: multiplicación/división  
+     - `SUM`, `SUB`: operaciones acumulativas  
+     - `MAC`, `MAS`: multiplicar y acumular/restar  
+   - Los resultados se almacenan en `result_reg` y se devuelven por MISO.  
+
+4. **Monitoreo y depuración**:  
+   - `acc_monitor` permite ver el contenido actual del acumulador.  
+   - `ready` indica si el coprocesador está listo para recibir la siguiente instrucción.  
+
+5. **Notas sobre implementación**:  
+   - Las operaciones de punto flotante están **simplificadas para pruebas funcionales**.  
+   - La jerarquía está organizada con `bfloat16_processor` como módulo top.  
+   - Todas las transferencias SPI son **LSB primero**.  
+
+---
+
+## Simulaciones realizadas
+
+Se verificó que:
+
+- El protocolo SPI funcione correctamente.  
+- La secuencia de recepción de operandos sea coherente con cada instrucción.  
+- El acumulador (`ACC`) se actualice o no según corresponda.  
+- Los resultados entregados por MISO coincidan con lo esperado.  
+
+---
+
+## Preparación para OpenLane
+
+El proyecto se estructuró siguiendo la recomendación de OpenLane:
+
+- Código fuente en Verilog  
+- Archivos JSON de configuración para la síntesis  
+- Archivos SDC con restricciones de tiempo  
+- Reportes STA post-síntesis  
+- Layout final generado por OpenLane  
+
+---
+
+## Secciones adicionales requeridas
+
+### 2. Diagrama de bloques y diagrama de estados
+
+> Aquí deben incluirse las imágenes del diagrama de bloques del coprocesador y la máquina de estados del módulo `bfloat16_processor`.
+
+### 3. Cobertura de la especificación
+
+- **Elementos cubiertos**:  
+  - Recepción de instrucciones por SPI  
+  - Ejecución de operaciones aritméticas (suma, resta, multiplicación, división)  
+  - Operaciones acumulativas (`SUM`, `SUB`, `MAC`, `MAS`)  
+  - Monitoreo del acumulador (`acc_monitor`)  
+  - Interfaz de salida MISO para resultados
+
+- **Elementos pendientes o limitaciones**:  
+  - Operaciones de punto flotante simplificadas, no completamente IEEE-754  
+  - Manejo de errores de overflow o división por cero no implementado  
+  - Optimización de área y temporización fina no realizada  
+
+### 4. Vista RTL
+
+> Insertar imagen generada por Vivado o Yosys mostrando la vista RTL del diseño.
+
+### 5. Diagramas de tiempo – simulación comportamental
+
+> Adjuntar capturas de pantalla de las simulaciones comportamentales usando los testbenches.  
+> Explicar qué se está probando (ej. instrucción ADD2, actualización de ACC, MISO) y el resultado obtenido, incluyendo casos correctos y excepcionales.
+
+### 6. Diagramas de tiempo – simulación funcional del layout final
+
+> Adjuntar capturas de la simulación funcional post-layout para un caso correcto del sistema.  
+> Construir un diagrama similar a las hojas técnicas de los dispositivos electrónicos.
+
+### 7. Caracterización de área y temporización
+
+> Reportar área utilizada en LUTs/FFs, retardo crítico, frecuencia máxima, etc., obtenido post-síntesis.
+
+### 8. Imagen del Layout Final
+
+> Incluir una captura de la herramienta de diseño mostrando el layout final del chip.
+
+---
+
+## Resumen
+
+El coprocesador `bfloat16_processor` es un **“chip matemático SPI”** capaz de ejecutar operaciones aritméticas en bfloat16, con soporte para instrucciones simples, acumulador interno, y comunicación bidireccional con un master SPI. Esta arquitectura modular permite integrarlo fácilmente en sistemas más grandes o realizar pruebas de hardware en FPGA.  
