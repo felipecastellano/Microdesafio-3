@@ -61,12 +61,7 @@ El diseño integra un **datapath** compuesto por:
 
 ## Simulaciones realizadas
 
-Se verificó que:
-
-- El protocolo SPI funcione correctamente.  
-- La secuencia de recepción de operandos sea coherente con cada instrucción.  
-- El acumulador (`ACC`) se actualice o no según corresponda.  
-- Los resultados entregados por MISO coincidan con lo esperado.  
+Se verificó para cada modulo su funcionamiento con Testbench para comprender su funcionamientos los aarchivos aparecen en el repositorio como .vcd se ejecutan con gtkwave archivo.vcd 
 
 ---
 
@@ -84,7 +79,7 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ## Secciones adicionales requeridas
 
-### 2. Diagrama de bloques y diagrama de estados
+### 2. Diagrama de bloques 
 
 > Aquí deben incluirse las imágenes del diagrama de bloques del coprocesador y la máquina de estados del módulo `bfloat16_processor`.
 
@@ -122,7 +117,7 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ### 8. Imagen del Layout Final
 
-> Incluir una captura de la herramienta de diseño mostrando el layout final del chip.
+![Foto 1](1/.png)
 
 ---
 
