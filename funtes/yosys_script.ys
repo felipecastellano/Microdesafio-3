@@ -1,0 +1,22 @@
+# Leer todos los archivos Verilog
+read_verilog bfloat16_processor.v
+read_verilog fpdiv.v
+read_verilog fpmul.v
+read_verilog fp16sum_res_pipe.v
+read_verilog myreg.v
+read_verilog exp_mant_logic.v
+read_verilog leading_zero_norm.v
+read_verilog add_renorm.v
+read_verilog sum_res_pp.v
+read_verilog rounder.v
+read_verilog op_sign_logic.v
+read_verilog fractional_divider.v
+
+# Construir la jerarquía usando el top
+hierarchy -top bfloat16_processor
+
+# Preparar para síntesis / netlist
+prep
+
+# Escribir el JSON
+write_json output.json
