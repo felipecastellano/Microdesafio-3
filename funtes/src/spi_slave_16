@@ -1,0 +1,67 @@
+`timescale 1ns/1ps
+module spi_slave_16(
+    input clk,            // reloj de sistema
+    input rst,            // reset
+    input cs_n,           // chip select activo bajo
+    input sclk,           // reloj SPI del maestro
+    input mosi,           // dato entrante SPI
+    output reg miso,      // dato saliente SPI
+    output reg [15:0] data_out,  // palabra recibida
+    output reg done,      // palabra completa recibida
+    input [15:0] data_in  // palabra que se enviará por MISO
+);
+
+    reg [15:0] shift_in;
+    reg [15:0] shift_out;
+    reg [3:0] bit_cnt;
+    reg sclk_d;
+
+    wire sclk_posedge;
+    wire sclk_negedge;
+
+    assign sclk_posedge = (sclk & ~sclk_d);
+    assign sclk_negedge = (~sclk & sclk_d);
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            shift_in <= 16'd0;
+            shift_out <= 16'd0;
+            bit_cnt <= 4'd0;
+            data_out <= 16'd0;
+            done <= 1'b0;
+            miso <= 1'b0;
+            sclk_d <= 1'b0;
+        end else begin
+            sclk_d <= sclk;
+
+            if (~cs_n) begin
+                done <= 1'b0;
+
+                // capturar MOSI en flanco positivo
+                if (sclk_posedge) begin
+                    shift_in <= {shift_in[14:0], mosi};
+                    bit_cnt <= bit_cnt + 1'b1;
+
+                    if (bit_cnt == 4'd15) begin
+                        data_out <= {shift_in[14:0], mosi};
+                        done <= 1'b1;
+                        bit_cnt <= 4'd0;
+                    end
+                end
+
+                // enviar MISO en flanco negativo
+                if (sclk_negedge) begin
+                    if (bit_cnt == 0)
+                        shift_out <= data_in; // cargar palabra a enviar
+                    miso <= shift_out[15];
+                    shift_out <= {shift_out[14:0], 1'b0};
+                end
+            end else begin
+                bit_cnt <= 4'd0;
+                done <= 1'b0;
+                miso <= 1'b0;
+            end
+        end
+    end
+
+endmodule
