@@ -81,7 +81,7 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ### 2. Diagrama de bloques 
 
-> Aquí deben incluirse las imágenes del diagrama de bloques del coprocesador y la máquina de estados del módulo `bfloat16_processor`.
+![Foto 1](bloques.png)
 
 ### 3. Cobertura de la especificación
 
@@ -99,23 +99,19 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ### 4. Vista RTL
 
-> Insertar imagen generada por Vivado o Yosys mostrando la vista RTL del diseño.
+para esto ejecute el archivo output.json en la siguiente pagina https://neilturley.dev/netlistsvg/
 
 ### 5. Diagramas de tiempo – simulación comportamental
 
-> Adjuntar capturas de pantalla de las simulaciones comportamentales usando los testbenches.  
-> Explicar qué se está probando (ej. instrucción ADD2, actualización de ACC, MISO) y el resultado obtenido, incluyendo casos correctos y excepcionales.
+se encuentra en el archivo tb_bfloat16_procesador_full.vcd se ejecuta con gtkwave
 
-### 6. Diagramas de tiempo – simulación funcional del layout final
 
-> Adjuntar capturas de la simulación funcional post-layout para un caso correcto del sistema.  
-> Construir un diagrama similar a las hojas técnicas de los dispositivos electrónicos.
 
-### 7. Caracterización de área y temporización
+### 6. Caracterización de área y temporización
 
-> Reportar área utilizada en LUTs/FFs, retardo crítico, frecuencia máxima, etc., obtenido post-síntesis.
+![Foto 1](síntesis.png)
 
-### 8. Imagen del Layout Final
+### 7. Imagen del Layout Final
 
 ![Foto 1](1.png)
 ---
