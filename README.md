@@ -117,7 +117,7 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ### 8. Imagen del Layout Final
 
-![Foto 1](imagen/1.png)
+image/1.png
 
 ---
 
