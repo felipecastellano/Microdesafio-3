@@ -1,0 +1,18 @@
+{
+	"DESIGN_NAME": "fpmul",
+	"VERILOG_FILES":
+
+	 ["dir::src/fpmul.v",
+	 "dir::src/myreg.v",
+	"dir::src/rounder.v"],
+
+	"CLOCK_PORT": "clk",
+	"FP_PDN_VOFFSET": 7,
+	"FP_PDN_HOFFSET": 7,
+	"FP_PDN_SKIPTRIM": true,
+	"FP_CORE_UTIL" : 40,
+	"CLOCK_PERIOD": 10.0,
+	"PNR_SDC_FILE" : "dir::src/clk.sdc",
+	"SIGNOFF_SDC_FILE" : "dir::src/clk.sdc",
+	"SYNTH_STRATEGY": "AREA 3"
+}
