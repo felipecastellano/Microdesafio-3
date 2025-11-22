@@ -97,7 +97,8 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ### 4. Vista RTL
 
-para esto ejecute el archivo output.json en la siguiente pagina https://neilturley.dev/netlistsvg/
+para esto ejecute el archivo output.json que se obtiene al usar yosys.
+y fianal mente en la siguiente pagina https://neilturley.dev/netlistsvg/ se ejecuta el .json para poder visualizar  el RTL
 
 ### 5. Diagramas de tiempo – simulación comportamental
 
