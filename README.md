@@ -77,7 +77,7 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
 
 ---
 
-## Secciones adicionales requeridas
+
 
 ### 2. Diagrama de bloques 
 
@@ -92,10 +92,8 @@ El proyecto se estructuró siguiendo la recomendación de OpenLane:
   - Monitoreo del acumulador (`acc_monitor`)  
   - Interfaz de salida MISO para resultados
 
-- **Elementos pendientes o limitaciones**:  
-  - Operaciones de punto flotante simplificadas, no completamente IEEE-754  
-  - Manejo de errores de overflow o división por cero no implementado  
-  - Optimización de área y temporización fina no realizada  
+- **Elementos pendientes **:  
+  una implementacion mas regurosa de testbench
 
 ### 4. Vista RTL
 
@@ -109,7 +107,7 @@ se encuentra en el archivo tb_bfloat16_procesador_full.vcd se ejecuta con gtkwav
 
 ### 6. Caracterización de área y temporización
 
-![Foto 1](síntesis.png)
+![Foto 1](sin.png)
 
 ### 7. Imagen del Layout Final
 
