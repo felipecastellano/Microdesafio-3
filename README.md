@@ -117,4 +117,4 @@ se encuentra en el archivo tb_bfloat16_procesador_full.vcd se ejecuta con gtkwav
 
 ## Resumen
 
-El coprocesador `bfloat16_processor` es un **“chip matemático SPI”** capaz de ejecutar operaciones aritméticas en bfloat16, con soporte para instrucciones simples, acumulador interno, y comunicación bidireccional con un master SPI. Esta arquitectura modular permite integrarlo fácilmente en sistemas más grandes o realizar pruebas de hardware en FPGA.  
+El coprocesador `bfloat16_processor` es un **“chip matemático SPI”** capaz de ejecutar operaciones aritméticas en bfloat16, con soporte para instrucciones simples, acumulador interno, y comunicación bidireccional con un master SPI.
